@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/screenshots/login-page.png" alt="Converge" width="100%" />
+<img src="docs/screenshots/screenshots/login-page.png" alt="Converge" width="100%" />
 
 # Converge
 
@@ -82,50 +82,45 @@ Most "collaborative editor" projects are CRUD with a WebSocket bolted on. Conver
 <table>
   <tr>
     <td width="50%" align="center">
-      <img src="docs/screenshots/login-page.png" alt="Login page" width="100%" />
+      <img src="docs/screenshots/screenshots/login-page.png" alt="Login page" width="100%" />
       <br /><b>🔐 Authentication</b>
       <br /><sub>JWT access + refresh tokens, transparent renewal</sub>
     </td>
     <td width="50%" align="center">
-      <img src="docs/screenshots/home-screen.png" alt="Home screen" width="100%" />
+      <img src="docs/screenshots/screenshots/home-screen.png" alt="Home screen" width="100%" />
       <br /><b>🏠 Workspace Dashboard</b>
       <br /><sub>Workspaces, documents, status badges and type icons</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="docs/screenshots/document-editor-live.png" alt="Live document editor" width="100%" />
+      <img src="docs/screenshots/screenshots/document-editor-live.png" alt="Live document editor" width="100%" />
       <br /><b>✍️ Real-Time Editor</b>
       <br /><sub>Live presence, remote cursors, anchored inline comments</sub>
     </td>
     <td width="50%" align="center">
-      <img src="docs/screenshots/command-palette.png" alt="Command palette" width="100%" />
+      <img src="docs/screenshots/screenshots/command-palette.png" alt="Command palette" width="100%" />
       <br /><b>⌘ Command Palette</b>
       <br /><sub>Ctrl/⌘+K: search all documents, switch workspace, run actions</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="docs/screenshots/rbac-manage-members.png" alt="Manage members" width="100%" />
+      <img src="docs/screenshots/screenshots/rbac-manage-members.png" alt="Manage members" width="100%" />
       <br /><b>🛡️ Role-Based Access Control</b>
       <br /><sub>Owner, Editor, Commenter, Viewer — enforced server-side</sub>
     </td>
     <td width="50%" align="center">
-      <img src="docs/screenshots/new-document-modal.png" alt="New document modal" width="100%" />
+      <img src="docs/screenshots/screenshots/new-document-modal.png" alt="New document modal" width="100%" />
       <br /><b>📄 Document Types & Workflow</b>
       <br /><sub>Spec, RFC, Meeting Notes, Sprint Plan</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" align="center">
-      <img src="docs/screenshots/workspace-activity.png" alt="Workspace activity feed" width="100%" />
+      <img src="docs/screenshots/screenshots/workspace-activity.png" alt="Workspace activity feed" width="100%" />
       <br /><b>🧾 Activity & Audit Log</b>
       <br /><sub>Timeline of who did what, grouped by day</sub>
-    </td>
-    <td width="50%" align="center">
-      <img src="docs/screenshots/document-grid-search.png" alt="Document search and filters" width="100%" />
-      <br /><b>🔎 Search & Status Filters</b>
-      <br /><sub>Title + content search with trigram-indexed queries</sub>
     </td>
   </tr>
 </table>
