@@ -1,4 +1,3 @@
-```markdown
 <div align="center">
 
 <img src="docs/screenshots/login-page.png" alt="Converge" width="100%" />
@@ -187,7 +186,6 @@ flowchart LR
     WORKER --> PG
     WS <-->|presence + subscribe| RD
     SVC -->|publish comment / status events| RD
-```
 
 **Design principles**
 
