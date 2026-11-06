@@ -4,9 +4,11 @@
 
 # Converge
 
-### Real-Time Collaborative Engineering Workspace
+### A real-time workspace for engineering teams
 
-*Write specs, RFCs and sprint plans together — live cursors, a review workflow, threaded comments, time-travel history, and role-based access, built on a server-authoritative concurrency model.*
+Converge brings technical documentation and team collaboration into one workspace. Teams can co-edit specifications, RFCs, meeting notes and sprint plans, discuss changes with anchored comments, review document history, and manage access through server-enforced roles.
+
+**The engineering focus:** reliable concurrent editing with PostgreSQL-backed revisions, conflict detection and client-side rebase — rather than treating WebSockets as a substitute for a consistency model.
 
 <br />
 
@@ -39,6 +41,21 @@
 [**Report Bug**](https://github.com/yogitha-singh/converge/issues)
 
 </div>
+
+## Project at a glance
+
+| | Details |
+|---|---|
+| **Category** | Full-stack application · Real-time collaboration · Engineering productivity |
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS |
+| **Backend** | Python 3.12, FastAPI, Pydantic |
+| **Data & messaging** | PostgreSQL, SQLAlchemy, Alembic, Redis, WebSockets |
+| **Quality & delivery** | pytest, Vitest, Docker Compose, GitHub Actions |
+| **Live application** | [converge-one-tau.vercel.app](https://converge-one-tau.vercel.app) |
+| **API reference** | [Swagger UI](https://converge-backend-rvnx.onrender.com/docs) |
+
+> **Repository note:** Screenshot and documentation links below are relative to the repository root. Keep the referenced `docs/` files and image assets in the repository so they render correctly on GitHub.
+
 
 ---
 
@@ -186,6 +203,7 @@ flowchart LR
     WORKER --> PG
     WS <-->|presence + subscribe| RD
     SVC -->|publish comment / status events| RD
+```
 
 **Design principles**
 
@@ -542,23 +560,61 @@ Errors are always `{"detail": …}`. Conflicts return `409` with a machine-reada
 
 ## 💻 Quick Start (Local)
 
-The whole stack — frontend, API, PostgreSQL, Redis — runs in Docker. You don't need Python or Node installed.
+The development stack runs the frontend, API, PostgreSQL and Redis through Docker Compose. With this route, you do not need to install Python or Node.js on your host machine.
 
-**Prerequisite:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+**Prerequisites**
+- [Git](https://git-scm.com/downloads)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) with the Docker engine running
+
+#### 1. Clone the repository
 
 ```bash
-# 1. Clone
 git clone https://github.com/yogitha-singh/converge.git
 cd converge
+```
 
-# 2. Configure (then set JWT_SECRET_KEY — generate one with: openssl rand -hex 32)
+#### 2. Create your environment file
+
+Copy `.env.example` to `.env` in the repository root. On macOS/Linux/Git Bash:
+
+```bash
 cp .env.example .env
+```
 
-# 3. Run everything (the API applies database migrations on startup)
+On Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Open `.env` and set the required values, especially `JWT_SECRET_KEY`. Generate a strong key with:
+
+```bash
+openssl rand -hex 32
+```
+
+Do not commit `.env` or paste production secrets into issue reports.
+
+#### 3. Build and start the services
+
+```bash
 docker compose up --build
+```
 
-# 4. Optional: load demo users, documents in every status, and anchored comments
-make seed        # or: python3 scripts/seed_demo.py
+Keep this terminal open while developing. The API applies database migrations during startup.
+
+#### 4. (Optional) Seed demo data
+
+After the services are healthy, load sample users, documents and comments:
+
+```bash
+make seed
+```
+
+If `make` is unavailable, run the seed script using the project's documented Python environment:
+
+```bash
+python3 scripts/seed_demo.py
 ```
 
 | Service | URL |
@@ -594,6 +650,42 @@ make seed        # or: python3 scripts/seed_demo.py
 | `VITE_WS_URL` | `ws://localhost:8000` | Frontend → WebSocket base URL (build-time) |
 
 </details>
+
+---
+
+## 🧰 Troubleshooting
+
+Use this section to narrow down setup and deployment issues before changing application code.
+
+| Symptom | Likely cause | What to check |
+|---|---|---|
+| `docker compose` cannot connect to the daemon | Docker Desktop is closed or still starting | Start Docker Desktop, wait until the engine is running, then retry. |
+| A service fails with `port is already allocated` | Another process is using a required port | Stop the conflicting process or update the host-port mapping in `docker-compose.yml`. |
+| API exits because a setting is missing | `.env` was not created, is in the wrong directory, or lacks a required value | Confirm `.env` is in the repository root and contains the variables listed below. |
+| Database connection is refused | PostgreSQL container is not healthy, or the API started before it was ready | Run `docker compose ps` and `docker compose logs db` (use the actual database service name from Compose). Then inspect API logs. |
+| `password authentication failed` | Database credentials in `.env` do not match the initialized database volume | Check the Compose database credentials. If this is a disposable local database, stop the stack and remove its volume only if you are comfortable deleting its data. |
+| Frontend loads but API requests fail | Incorrect `VITE_API_URL`, CORS origin, or API service state | Verify the frontend API URL, backend `CORS_ORIGINS`, and that `/health` responds. Vite variables are baked in at build time, so rebuild after changing them. |
+| WebSocket connection fails | Wrong WebSocket URL, token, or origin | Use `ws://` locally and `wss://` in production; verify the token and allowed origin. Check browser DevTools → Network → WS. |
+| Live demo is initially slow | Render free-tier service may be waking from idle | Wait for the first request to complete, then retry. |
+| Production database connection fails with SSL errors | Provider URL is not in asyncpg-compatible form | For Neon, follow the URL conversion guidance in the deployment section and use `ssl=require`. |
+
+### Useful diagnostic commands
+
+```bash
+# See running services and health status
+docker compose ps
+
+# Follow logs for all services
+docker compose logs -f
+
+# Follow one service (replace <service> with its Compose service name)
+docker compose logs -f <service>
+
+# Rebuild after dependency or frontend build-time configuration changes
+docker compose up --build
+```
+
+> **Before deleting volumes:** `docker compose down -v` removes named volumes and can permanently delete local database data. Use it only when you intentionally want a clean database.
 
 ---
 
@@ -791,6 +883,29 @@ converge/
 
 ---
 
+---
+
+## 🔐 Security & configuration notes
+
+- Never commit `.env`, database credentials, JWT signing keys or provider tokens.
+- Use a unique, high-entropy `JWT_SECRET_KEY` outside local development.
+- Set `CORS_ORIGINS` to the exact frontend origin(s) you control; avoid permissive wildcards in production.
+- Use TLS-enabled service URLs for hosted PostgreSQL/Redis providers.
+- The frontend may hide controls based on role, but authorization is enforced by the backend service layer.
+
+## 🤝 Contributing
+
+Contributions, bug reports and focused improvement proposals are welcome.
+
+1. Open an issue describing the bug or proposed change.
+2. For a code change, create a focused branch and keep the pull request scoped.
+3. Add or update tests for behavior changes.
+4. Run the relevant backend/frontend checks before submitting.
+
+For security-sensitive reports, do not publish credentials, tokens or exploitable details in a public issue.
+
+---
+
 ## 📚 Further Reading
 
 - [`docs/concurrency.md`](docs/concurrency.md) — the full concurrency, rebase and history write-up
@@ -809,4 +924,3 @@ converge/
 [Live Demo](https://converge-one-tau.vercel.app) · [API Docs](https://converge-backend-rvnx.onrender.com/docs) · [Issues](https://github.com/yogitha-singh/converge/issues)
 
 </div>
-```
