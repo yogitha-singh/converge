@@ -119,8 +119,13 @@ export async function apiFetch<T = any>(path: string, options: RequestInit = {},
 function wsBase(): string {
   const configured = import.meta.env.VITE_WS_URL;
   if (configured) return configured;
-  if (API_URL === "") return `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
-  return "ws://localhost:8000";
+  
+  if (!API_URL) {
+    return `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
+  }
+  
+  // Dynamically convert the API URL to a WebSocket URL (https -> wss, http -> ws)
+  return API_URL.replace(/^http/, "ws");
 }
 
 export function wsUrl(path: string): string {
