@@ -54,9 +54,6 @@ Converge brings technical documentation and team collaboration into one workspac
 | **Live application** | [converge-one-tau.vercel.app](https://converge-one-tau.vercel.app) |
 | **API reference** | [Swagger UI](https://converge-backend-rvnx.onrender.com/docs) |
 
-> **Repository note:** Screenshot and documentation links below are relative to the repository root. Keep the referenced `docs/` files and image assets in the repository so they render correctly on GitHub.
-
-
 ---
 
 > [!NOTE]
