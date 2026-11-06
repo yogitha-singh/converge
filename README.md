@@ -1,3 +1,4 @@
+```markdown
 <div align="center">
 
 <img src="docs/screenshots/login-page.png" alt="Converge" width="100%" />
@@ -27,10 +28,6 @@
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=flat-square&logo=render&logoColor=black)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
-
-<!-- Add this once your GitHub Actions run is green:
-[![CI](https://github.com/yogitha-singh/converge/actions/workflows/ci.yml/badge.svg)](https://github.com/yogitha-singh/converge/actions/workflows/ci.yml)
--->
 
 <br />
 
@@ -814,3 +811,4 @@ converge/
 [Live Demo](https://converge-one-tau.vercel.app) · [API Docs](https://converge-backend-rvnx.onrender.com/docs) · [Issues](https://github.com/yogitha-singh/converge/issues)
 
 </div>
+```
